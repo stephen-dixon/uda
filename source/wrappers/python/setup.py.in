@@ -3,7 +3,7 @@
 import os
 import sys
 import sysconfig
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 from Cython.Build import cythonize
 from Cython.Compiler.Main import default_options
 import numpy
@@ -28,6 +28,9 @@ elif sys.platform.lower() == 'darwin':
     dynlib_ext = 'dylib'
     # On Mac OS we have to force setting of rpath
     extra_link_args.append('-Wl,-rpath,%s' % os.path.join(root, 'lib'))
+else:
+    stalib_ext = 'a'
+    dynlib_ext = 'so'
 
 uda_lib_names = '@UDA_LIBS@'.split(';') if '@UDA_LIBS@' else []
 build_fat = os.environ.get('UDA_FAT_PYTHON', False)
@@ -47,7 +50,7 @@ else:
 
 ext = Extension(
     'cpyuda',
-    ['pyuda/cpyuda/cpyuda.pyx'],
+    ['ukaea_pyuda_test/cpyuda/cpyuda.pyx'],
     include_dirs=list(filter(None, [
         '/usr/include/tirpc',
         '@TIRPC_PYUDA_INCLUDE_DIR@',
@@ -78,15 +81,22 @@ ext = Extension(
     define_macros=extra_macros,
 )
 
+
+def get_version(v):
+    if v.count('.') > 2:
+        v = ".Post".join(v.rsplit('.', 1))
+    print("setup version = %s" % v)
+    return v
+
+
+        # use_scm_version={'version_scheme': 'post-release', 'local_scheme': 'no-local-version'},
 setup(
-    name='@PROJECT_NAME@',
-    version='@PROJECT_VERSION@',
+    name='ukaea_pyuda_test',
+    version=get_version('@PROJECT_VERSION@'),
     description='Unified Data Access (UDA)',
     author='Jonathan Hollocombe',
     author_email='jonathan.hollocombe@ukaea.uk',
-    url='https://github.com/ukaea/UDA',
-    packages=['pyuda'],
+    url='https://github.com/stephen-dixon/uda',
+    packages=['ukaea_pyuda_test'],
     ext_modules=cythonize([ext]),
-    setup_requires=['numpy>=1.7', 'Cython>=0.29', 'six'],
-    install_requires=['numpy>=1.7', 'six'],
 )
