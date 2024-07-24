@@ -146,6 +146,7 @@ jobs:
           -DSSLAUTHENTICATION=${{ matrix.ssl }}
           -DCLIENT_ONLY=${{ matrix.client-only }}
           -DENABLE_CAPNP=${{ matrix.capnp }}
+          -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/uda_install
 
       - name: Build
         run: cmake --build build --config ${{ matrix.release }}
@@ -157,6 +158,11 @@ jobs:
       - name: Install
         if: matrix.os == 'windows-latest'
         run: cmake --install build --config ${{ matrix.release }}
+
+      - name: Test windows mingw client
+        if: matrix.os = 'windows-latest'
+        run: >
+          ${{github.workspace}}/uda_install/bin/uda_cli.exe -h 34.75.87.48 -p 56565 --ping
 
 #      - name: Install pyuda
 #        if: matrix.os == 'ubuntu-latest'
