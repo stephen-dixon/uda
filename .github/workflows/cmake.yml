@@ -177,7 +177,7 @@ jobs:
           && cp install/lib/libuda_client.* install/bin/
           && echo "ls install" && ls install && echo "ls install/bin" && ls install/bin 
           && echo "adding msys2 to path" &&
-          $Env:PATH+='C:\msys64' &&
+          $Env:PATH+='C:\msys64' 
           && echo "calling uda commandline interface..." &&
           (./install/bin/uda_cli.exe --help) 
           && echo "attempting to connect to remote server..." &&
