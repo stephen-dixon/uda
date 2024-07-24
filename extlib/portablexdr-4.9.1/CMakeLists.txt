@@ -30,7 +30,9 @@ configure_file(
 
 include_directories( ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR} )
 
-if( NOT WIN32 )
+option( BUILD_SHARED_LIBS "build xdrlib as a shared library" ON ) 
+
+if( BUILD_SHARED_LIBS )
     add_library( ${PROJECT_NAME} SHARED ${SOURCES} )
 else()
     add_library( ${PROJECT_NAME} STATIC ${SOURCES} )

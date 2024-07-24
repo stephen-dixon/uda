@@ -172,7 +172,12 @@ jobs:
       - name: Test windows mingw client
         if: matrix.os == 'windows-latest'
         run: >
-          ls install && ls install/bin &&
+          echo "copying portablexdr libs to bin directory..." &&
+          cp extlib/install/lib/* install/bin/ 
+          && echo "`ls install`" && ls install && echo "`ls install/bin`" && ls install/bin 
+          && echo "calling uda commandline interface..." &&
+          ./install/bin/uda_cli.exe --help
+          && echo "attempting to connect to remote server..." &&
           ./install/bin/uda_cli.exe -h 34.75.87.48 -p 56565 --ping
 
 
