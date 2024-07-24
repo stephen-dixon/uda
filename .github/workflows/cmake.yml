@@ -171,13 +171,14 @@ jobs:
 
       - name: Test windows mingw client
         if: matrix.os == 'windows-latest'
+        shell: pwsh
         run: >
           echo "copying portablexdr libs to bin directory..." &&
           cp extlib/install/lib/* install/bin/ 
           && cp install/lib/libuda_client.* install/bin/
           && echo "ls install" && ls install && echo "ls install/bin" && ls install/bin 
           && echo "adding msys2 to path" &&
-          $Env:PATH+='C:\msys64' 
+          Add-Content $env:GITHUB_PATH "C:\msys64"
           && echo "calling uda commandline interface..." &&
           (./install/bin/uda_cli.exe --help) 
           && echo "attempting to connect to remote server..." &&
