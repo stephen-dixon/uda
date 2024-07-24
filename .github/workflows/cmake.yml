@@ -23,7 +23,7 @@ jobs:
         # ssl: [ON, OFF]
         # client-only: [OFF]
         # capnp: [ON, OFF]
-        os: [windows-latest]
+        os: [windows-2019]
         release: [Release]
         ssl: [OFF]
         client-only: [ON]
@@ -43,11 +43,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # - uses: actions/github-script@v7
-      #   with:
-      #     script: |
-      #       core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-      #       core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
       - name: Install linux dependencies
         if: matrix.os == 'ubuntu-latest'
@@ -96,10 +96,10 @@ jobs:
         if: matrix.os == 'windows-latest'
         # vcpkg install --triplet x64-mingw-static --binarysource="clear;x-gha,readwrite"
         # rm -r $VCPKG_INSTALLATION_ROOT/buildtrees &&
+        # git -C $VCPKG_INSTALLATION_ROOT pull &&
+        # vcpkg update && vcpkg upgrade &&
         run: >
-          git -C $VCPKG_INSTALLATION_ROOT pull &&
-          vcpkg update && vcpkg upgrade &&
-          vcpkg install --triplet x64-mingw-static 
+          vcpkg install --triplet x64-mingw-static --binarysource="clear;x-gha,readwrite"
           libxml2
           capnproto
           boost-program-options
@@ -168,12 +168,12 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: >
           cmake --install build --config ${{ matrix.release }}
-          && ./install/bin/uda_cli.exe -h 34.75.87.48 -p 56565 --ping
 
-      # - name: Test windows mingw client
-      #   if: matrix.os == 'windows-latest'
-      #   run: >
-      #     uda_cli.exe -h 34.75.87.48 -p 56565 --ping
+      - name: Test windows mingw client
+        if: matrix.os == 'windows-latest'
+        run: >
+          ls install && ls install/bin &&
+          ./install/bin/uda_cli.exe -h 34.75.87.48 -p 56565 --ping
 
 
 #      - name: Install pyuda
