@@ -23,7 +23,7 @@ jobs:
         # ssl: [ON, OFF]
         # client-only: [OFF]
         # capnp: [ON, OFF]
-        os: [windows-2019]
+        os: [windows-latest]
         release: [Release]
         ssl: [OFF]
         client-only: [ON]
@@ -93,7 +93,7 @@ jobs:
 #          key: ${{ runner.os }}-build-${{ env.cache-name }}
 
       - name: Install windows dependencies
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-latest'
         # vcpkg install --triplet x64-mingw-static --binarysource="clear;x-gha,readwrite"
         # rm -r $VCPKG_INSTALLATION_ROOT/buildtrees &&
         # git -C $VCPKG_INSTALLATION_ROOT pull &&
@@ -132,21 +132,21 @@ jobs:
           -DOPENSSL_ROOT_DIR="$(brew --prefix openssl@3)"
 
       - name: Configure portable XDR
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-latest'
         run: >
           cd extlib
           && cmake -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -B build -G "MinGW Makefiles" .
 
       - name: Build portable XDR
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-latest'
         run: cd extlib && cmake --build build
 
       - name: Install portable XDR
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-latest'
         run: cd extlib && cmake --install build --prefix install
 
       - name: Configure CMake (windows)
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-latest'
         run: >
           XDR_ROOT=extlib/install cmake -G "MinGW Makefiles" -B build
           -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
@@ -161,16 +161,16 @@ jobs:
         run: cmake --build build --config ${{ matrix.release }}
 
       - name: Install
-        if: matrix.os != 'windows-2019'
+        if: matrix.os != 'windows-latest'
         run: sudo cmake --install build --config ${{ matrix.release }}
 
       - name: Install
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-latest'
         run: >
           cmake --install build --config ${{ matrix.release }}
 
       - name: Test windows mingw client
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-latest'
         run: >
           ls install && ls install/bin &&
           ./install/bin/uda_cli.exe -h 34.75.87.48 -p 56565 --ping
