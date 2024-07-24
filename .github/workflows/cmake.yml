@@ -179,10 +179,10 @@ jobs:
           && echo "ls install" && ls install && echo "ls install/bin" && ls install/bin 
           && echo "adding msys2 to path" &&
           Add-Content $env:GITHUB_PATH "C:\msys64"
-          && echo "calling uda commandline interface..." &&
           && echo "attempting to connect to remote server..." &&
           ./install/bin/uda_cli.exe -h 34.75.87.48 -p 56565 --ping
 
+          # && echo "calling uda commandline interface..." &&
           # (./install/bin/uda_cli.exe --help) 
 
 #      - name: Install pyuda
