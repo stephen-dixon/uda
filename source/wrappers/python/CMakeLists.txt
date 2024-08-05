@@ -3,8 +3,10 @@ file( GLOB CYTHON_FILES pyuda/cpyuda/*.pyx )
 install( FILES ${CYTHON_FILES} pyuda/cpyuda/uda.pxd DESTINATION python_installer/pyuda/cpyuda )
 
 file( GLOB INSTALL_FILES pyuda/*.py )
+file( GLOB PYUDA_UDA_INSTALL_FILES uda/*.py )
 
 install( FILES ${INSTALL_FILES} DESTINATION python_installer/pyuda )
+install( FILES ${PYUDA_UDA_INSTALL_FILES} DESTINATION python_installer/uda )
 
 configure_file( ${CMAKE_CURRENT_LIST_DIR}/pyuda/_version.py.in ${CMAKE_CURRENT_BINARY_DIR}/pyuda/_version.py @ONLY )
 install( FILES ${CMAKE_CURRENT_BINARY_DIR}/pyuda/_version.py DESTINATION python_installer/pyuda )
